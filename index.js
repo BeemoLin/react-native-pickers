@@ -4,6 +4,8 @@ import AreaPicker from './view/AreaPicker';
 
 import CustomPicker from './CustomPicker';
 
+import Picker from './Picker';
+
 import DatePicker from './view/DatePicker';
 
 import InputDialog from './view/InputDialog';
@@ -27,6 +29,7 @@ export {
     BaseDialog,
     AreaPicker,
     CustomPicker,
+    Picker,
     DatePicker,
     InputDialog,
     PickerView,
