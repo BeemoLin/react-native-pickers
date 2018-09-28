@@ -16,7 +16,8 @@ export default class Picker extends BaseDialog {
         items: [{key: 0, value: 'a'}, {key: 1, value: 'b'}, {key: 2, value: 'c'}],
         onPickerSelected: null,
         confirmText: 'OK',
-        confirmBtnColor: '#fff',
+        cancelText: 'Cancel',
+        confirmBackgroundColor: '#fff',
         confirmTextColor: '#333',
         onPress: null,
     };
@@ -36,6 +37,35 @@ export default class Picker extends BaseDialog {
             <View style={{
                 width: this.mScreenWidth, flexDirection: 'column'
             }}>
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    width: this.mScreenWidth,
+                    backgroundColor: this.props.confirmBackgroundColor,
+                    paddingLeft: 10, paddingRight: 10,
+                }}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.dismiss();
+                        }}
+                        style={{
+                            width: this.getSize(50), height: this.getSize(50),
+                            justifyContent: 'center', alignItems: 'center'
+                        }}>
+                        <Text style={{ color: this.props.confirmTextColor, fontSize: this.getSize(16), fontWeight: '400' }}>{this.props.cancelText}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.props.onPickerSelected && this.props.onPickerSelected(this.select);
+                            this.dismiss();
+                        }}
+                        style={{
+                            width: this.getSize(50), height: this.getSize(50),
+                            justifyContent: 'center', alignItems: 'center'
+                        }}>
+                        <Text style={{ color: this.props.confirmTextColor, fontSize: this.getSize(16), fontWeight: '400' }}>{this.props.confirmText}</Text>
+                    </TouchableOpacity>
+                </View>
                 <PickerView
                     list={this.props.items}
                     onPickerSelected={(toValue) => {
@@ -45,20 +75,6 @@ export default class Picker extends BaseDialog {
                     itemSelectedColor={0x333333ff}
                     itemWidth={this.mScreenWidth}
                     itemHeight={this.getSize(40)} />
-                <View style={{width: this.mScreenWidth}}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.props.onPickerSelected && this.props.onPickerSelected(this.select);
-                            this.dismiss();
-                        }}
-                        style={{
-                            width: this.mScreenWidth, height: this.getSize(50),
-                            backgroundColor: this.props.confirmBtnColor,
-                            justifyContent: 'center', alignItems: 'center', borderTopWidth: 2
-                        }}>
-                        <Text style={{ color: this.props.confirmTextColor, fontSize: this.getSize(16), fontWeight: '400' }}>{this.props.confirmText}</Text>
-                    </TouchableOpacity>
-                </View>
             </View>
         );
     }
