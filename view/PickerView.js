@@ -256,7 +256,7 @@ class PickerView extends BaseComponent {
                     outputRange: [this.props.itemTextColor, this.props.itemSelectedColor]
                 }), fontSize: this.props.fontSize ? this.props.fontSize : this.getSize(20),
                 backgroundColor: 'transparent', fontWeight: 'normal'
-            }}>{item}</Animated.Text>
+            }}>{item.value}</Animated.Text>
         </View >
     }
 
