@@ -35,6 +35,7 @@ export default class Picker extends BaseDialog {
                         this.dismiss();
                     }}
                     fontSize={this.getSize(14)}
+                    itemSelectedColor={0x333333ff}
                     itemWidth={this.mScreenWidth}
                     itemHeight={this.getSize(40)} />
             </View>
