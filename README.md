@@ -8,7 +8,7 @@
 ![img](https://github.com/iberHK/react-native-pickers/blob/master/screenshot/demo2.gif?raw=true)
 
 ### 安装：
-<code>yarn add react-native-pickers</code><br>
+<code>yarn add https://github.com/BeemoLin/react-native-pickers.git#master</code><br>
 <code>yarn add react-native-svg</code><br>
 <code>react-native link react-native-svg</code><br>
 
