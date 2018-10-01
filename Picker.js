@@ -8,7 +8,7 @@ import {
 
 import BaseDialog from './view/BaseDialog';
 
-import PickerView from './view/PickerView';
+import PickerObjectView from './view/PickerObjectView';
 
 export default class Picker extends BaseDialog {
 
