@@ -230,6 +230,11 @@ react-native-svg ios有error的話, 需要手動加lib (Target > General > Linke
             <td>item高度</td>
         </tr>
         <tr>
+            <td>onlyTime</td>
+            <td>false</td>
+            <td>只顯示時間</td>
+        </tr>
+        <tr>
             <td>HH</td>
             <td>true</td>
             <td>是否显示小时</td>
