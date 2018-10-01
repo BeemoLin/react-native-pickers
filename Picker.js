@@ -33,6 +33,7 @@ export default class Picker extends BaseDialog {
     }
 
     renderContent() {
+        this.props.items.map((item, _index) => {item._index = _index;});
         return (
             <View style={{
                 width: this.mScreenWidth, flexDirection: 'column'
@@ -72,7 +73,7 @@ export default class Picker extends BaseDialog {
                         this.select = toValue;
                     }}
                     fontSize={this.getSize(14)}
-                    itemSelectedColor={0x333333ff}
+                    selectedIndex={this.select._index}
                     itemWidth={this.mScreenWidth}
                     itemHeight={this.getSize(40)} />
             </View>
