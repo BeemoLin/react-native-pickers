@@ -67,7 +67,7 @@ export default class Picker extends BaseDialog {
                         <Text style={{ color: this.props.confirmTextColor, fontSize: this.getSize(16), fontWeight: '400' }}>{this.props.confirmText}</Text>
                     </TouchableOpacity>
                 </View>
-                <PickerView
+                <PickerObjectView
                     list={this.props.items}
                     onPickerSelected={(toValue) => {
                         this.select = toValue;

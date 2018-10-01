@@ -37,7 +37,8 @@ class DatePicker extends BaseDialog {
 
         HH: true,
         mm: true,
-        ss: false
+        ss: false,
+        onlyTime: false,
     }
 
     constructor(props) {
@@ -52,6 +53,8 @@ class DatePicker extends BaseDialog {
         let years = [];
         let months = [];
         let days = [];
+        pickerData = [];
+        selectedIndex = [];
 
         let startYear = this.props.startYear;
         let endYear = this.props.endYear;
@@ -85,7 +88,9 @@ class DatePicker extends BaseDialog {
         }
         selectedDay = selectedDay.substr(0, selectedDay.length - unit[2].length);
 
-        pickerData = [years, months, days];
+        if(!this.props.onlyTime) {
+            pickerData = [years, months, days];
+        }
 
         selectedIndex = [
             years.indexOf(selectedYear + unit[0]) == -1 ? years.length - 1 : years.indexOf(selectedYear + unit[0]),
@@ -94,42 +99,52 @@ class DatePicker extends BaseDialog {
         this.props.selectedValue[0] = years[selectedIndex[0]];
         this.props.selectedValue[1] = months[selectedIndex[1]];
         this.props.selectedValue[2] = days[selectedIndex[2]];
+
         if (this.props.HH) {
             let hours = [];
             for (let i = 0; i < 24; i++) {
-                hours.push((i + 1) + '时');
+                hours.push((i + 1) + ':');
             }
             pickerData.push(hours);
             if (this.props.selectedValue) {
-                selectedIndex.push((this.props.selectedValue[3] ? parseInt(this.props.selectedValue[3]) : new Date().getHours()) - 1);
+                if(this.props.onlyTime) {
+                    selectedIndex.push((this.props.selectedValue[3] ? parseInt(this.props.selectedValue[3]) : new Date().getHours()) - 1);
+                } else {
+                    selectedIndex.push((this.props.selectedValue[3] ? parseInt(this.props.selectedValue[3]) : new Date().getHours()) - 1);
+                }
             } else {
                 selectedIndex.push((new Date().getHours() - 1));
             }
-            this.props.selectedValue[3] = (selectedIndex[3] + 1) + '时';
+
+            this.props.selectedValue[3] = (selectedIndex[3] + 1);
+
             if (this.props.mm) {
                 let minutes = [];
                 for (let i = 0; i < 60; i++) {
-                    minutes.push((i + 1) + '分');
+                    minutes.push((i) + ':');
                 }
                 pickerData.push(minutes);
                 if (this.props.selectedValue) {
-                    selectedIndex.push((this.props.selectedValue[4] ? parseInt(this.props.selectedValue[4]) : new Date().getMinutes()) - 1);
+                    selectedIndex.push((this.props.selectedValue[4] ? parseInt(this.props.selectedValue[4]) : new Date().getMinutes()));
                 } else {
-                    selectedIndex.push((new Date().getMinutes() - 1));
+                    selectedIndex.push((new Date().getMinutes()));
                 }
-                this.props.selectedValue[4] = (selectedIndex[4] + 1) + '分';
+
+                this.props.selectedValue[4] = (selectedIndex[4]);
+
                 if (this.props.ss) {
                     let seconds = [];
                     for (let i = 0; i < 60; i++) {
-                        seconds.push((i + 1) + '秒');
+                        seconds.push((i));
                     }
                     pickerData.push(seconds);
                     if (this.props.selectedValue) {
-                        selectedIndex.push((this.props.selectedValue[5] ? parseInt(this.props.selectedValue[5]) : 1) - 1);
+                        selectedIndex.push((this.props.selectedValue[5] ? parseInt(this.props.selectedValue[5]) : 0));
                     } else {
                         selectedIndex.push(1);
                     }
-                    this.props.selectedValue[5] = (selectedIndex[5] + 1) + '秒';
+
+                    this.props.selectedValue[5] = (selectedIndex[5]);
                 }
             }
         }
@@ -156,11 +171,11 @@ class DatePicker extends BaseDialog {
                     list={item}
                     onPickerSelected={(toValue) => {
                         //是否联动的实现位置
-                        this.props.selectedValue[pickerId] = toValue;
+                        this.props.selectedValue[(this.props.onlyTime ? pickerId + 3 : pickerId)] = toValue;
                         console.log('====')
                         this.setState({ ...this.getDateList() });
                     }}
-                    selectedIndex={this.state.selectedIndex[pickerId]}
+                    selectedIndex={this.state.selectedIndex[(this.props.onlyTime ? pickerId + 3 : pickerId)]}
                     fontSize={this.getSize(14)}
                     itemWidth={this.mScreenWidth / this.state.pickerData.length}
                     itemHeight={this.props.itemHeight} />

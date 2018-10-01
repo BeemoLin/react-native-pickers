@@ -15,7 +15,7 @@ import Svg, {
     Stop
 } from 'react-native-svg';
 
-class PickerView extends BaseComponent {
+class PickerObjectView extends BaseComponent {
 
     static defaultProps = {
         itemTextColor: 0x333333ff,
@@ -341,4 +341,4 @@ class PickerView extends BaseComponent {
     }
 }
 
-export default PickerView;
+export default PickerObjectView;
