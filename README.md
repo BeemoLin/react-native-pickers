@@ -12,6 +12,8 @@
 <code>yarn add react-native-svg</code><br>
 <code>react-native link react-native-svg</code><br>
 
+react-native-svg ios有error的話, 需要手動加lib (Target > General > Linked Frameworks and Libraries => add SVG)
+
 ### 使用：
 
 <li>AreaPicker:</li>
