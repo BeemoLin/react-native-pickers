@@ -33,6 +33,8 @@ class DatePicker extends BaseDialog {
         cancelTextSize: 14,
         cancelTextColor: '#333333',
 
+        confirmBackgroundColor: '#fff',
+
         itemHeight: 40,
 
         HH: true,
@@ -196,7 +198,7 @@ class DatePicker extends BaseDialog {
             </View>
             <View style={{
                 width: this.mScreenWidth, height: this.getSize(44),
-                backgroundColor: '#ffffff', flexDirection: 'row',
+                backgroundColor: this.props.confirmBackgroundColor, flexDirection: 'row',
                 justifyContent: 'space-between', position: 'absolute', top: 0
             }}>
                 <TouchableOpacity
