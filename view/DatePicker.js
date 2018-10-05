@@ -219,12 +219,12 @@ class DatePicker extends BaseDialog {
                             width: '100%',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            marginBottom: 12,
+                            marginBottom: 14,
                     }}>
                 <Text style={{
                         color: this.props.unitTextColor,
                             fontSize: this.getSize(14),
-                            fontWeight: '900',
+                            fontWeight: '400',
                     }}>{this.props.timeUnit[!!this.props.onlyTime ? pickerId : pickerId - 3]}</Text>
                     </View>
                     </View>
