@@ -8,7 +8,7 @@ import {
 
 class BaseComponent extends Component {
 
-    mScreenWidth = Dimensions.get('window').width + 1;
+    mScreenWidth = Dimensions.get('window').width + 2;
 
     mScreenHeight = Dimensions.get('window').height;
 
