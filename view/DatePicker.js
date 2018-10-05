@@ -107,14 +107,14 @@ class DatePicker extends BaseDialog {
         if (this.props.HH) {
             let hours = [];
             for (let i = 0; i < 24; i++) {
-                hours.push((i));
+                hours.push(i);
             }
             pickerData.push(hours);
             if (this.props.selectedValue) {
                 if(this.props.onlyTime) {
-                    selectedIndex.push((this.props.selectedValue[3] ? parseInt(this.props.selectedValue[3]) : new Date().getHours()));
+                    selectedIndex.push((this.props.selectedValue[3] ? parseInt(this.props.selectedValue[3]) : 0));
                 } else {
-                    selectedIndex.push((this.props.selectedValue[3] ? parseInt(this.props.selectedValue[3]) : new Date().getHours()));
+                    selectedIndex.push((this.props.selectedValue[3] ? parseInt(this.props.selectedValue[3]) : 0));
                 }
             } else {
                 selectedIndex.push((new Date().getHours()));
@@ -129,7 +129,7 @@ class DatePicker extends BaseDialog {
                 }
                 pickerData.push(minutes);
                 if (this.props.selectedValue) {
-                    selectedIndex.push((this.props.selectedValue[4] ? parseInt(this.props.selectedValue[4]) : new Date().getMinutes()));
+                    selectedIndex.push((this.props.selectedValue[4] ? parseInt(this.props.selectedValue[4]) : 0));
                 } else {
                     selectedIndex.push((new Date().getMinutes()));
                 }
