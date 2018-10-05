@@ -18,9 +18,11 @@ class DatePicker extends BaseDialog {
         removeSubviews: false,
         itemTextColor: 0x333333ff,
         itemSelectedColor: 0x1097D5ff,
+        unitTextColor: '#97D5ff',
         onPickerCancel: null,
         onPickerConfirm: null,
         unit: ['年', '月', '日'],
+        timeUnit: ['時', '分', '秒'],
         selectedValue: [new Date().getFullYear() + '年', new Date().getMonth() + 1 + '月', new Date().getDate() + '日'],
         startYear: 1990,
         endYear: new Date().getFullYear(),
@@ -105,25 +107,25 @@ class DatePicker extends BaseDialog {
         if (this.props.HH) {
             let hours = [];
             for (let i = 0; i < 24; i++) {
-                hours.push((i + 1) + ':');
+                hours.push((i));
             }
             pickerData.push(hours);
             if (this.props.selectedValue) {
                 if(this.props.onlyTime) {
-                    selectedIndex.push((this.props.selectedValue[3] ? parseInt(this.props.selectedValue[3]) : new Date().getHours()) - 1);
+                    selectedIndex.push((this.props.selectedValue[3] ? parseInt(this.props.selectedValue[3]) : new Date().getHours()));
                 } else {
-                    selectedIndex.push((this.props.selectedValue[3] ? parseInt(this.props.selectedValue[3]) : new Date().getHours()) - 1);
+                    selectedIndex.push((this.props.selectedValue[3] ? parseInt(this.props.selectedValue[3]) : new Date().getHours()));
                 }
             } else {
-                selectedIndex.push((new Date().getHours() - 1));
+                selectedIndex.push((new Date().getHours()));
             }
 
-            this.props.selectedValue[3] = (selectedIndex[3] + 1);
+            this.props.selectedValue[3] = (selectedIndex[3]);
 
             if (this.props.mm) {
                 let minutes = [];
                 for (let i = 0; i < 60; i++) {
-                    minutes.push((i) + ':');
+                    minutes.push((i));
                 }
                 pickerData.push(minutes);
                 if (this.props.selectedValue) {
@@ -166,7 +168,8 @@ class DatePicker extends BaseDialog {
     renderPicker() {
         return this.state.pickerData.map((item, pickerId) => {
             if (item) {
-                return <PickerView
+                if(!this.props.onlyTime && pickerId < 3) {
+                    return <PickerView
                     key={'picker' + pickerId}
                     itemTextColor={this.props.itemTextColor}
                     itemSelectedColor={this.props.itemSelectedColor}
@@ -179,8 +182,60 @@ class DatePicker extends BaseDialog {
                     }}
                     selectedIndex={this.state.selectedIndex[(this.props.onlyTime ? pickerId + 3 : pickerId)]}
                     fontSize={this.getSize(14)}
-                    itemWidth={this.mScreenWidth / this.state.pickerData.length}
+                    itemWidth={this.mScreenWidth / this.state.pickerData.length - (!this.props.onlyTime ? 0 : 30)}
                     itemHeight={this.props.itemHeight} />
+                } else {
+                    return (
+                        <View style={{
+                        width: this.mScreenWidth / this.state.pickerData.length,
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                    }}>
+                <PickerView
+                    key={'picker' + pickerId}
+                    itemTextColor={this.props.itemTextColor}
+                    itemSelectedColor={this.props.itemSelectedColor}
+                    list={item}
+                    onPickerSelected={(toValue) => {
+                        //是否联动的实现位置
+                        this.props.selectedValue[(this.props.onlyTime ? pickerId + 3 : pickerId)] = toValue;
+                        console.log('====')
+                        this.setState({ ...this.getDateList() });
+                    }}
+                    selectedIndex={this.state.selectedIndex[(this.props.onlyTime ? pickerId + 3 : pickerId)]}
+                    fontSize={this.getSize(14)}
+                    itemWidth={this.mScreenWidth / this.state.pickerData.length - (!!this.props.onlyTime ? 40 : 30)}
+                    itemHeight={this.props.itemHeight} />
+                    <View style={{
+                        width: (!!this.props.onlyTime ? 40 : 30),
+                            height: '100%',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            backgroundColor: '#fff'
+                    }}>
+                <View style={{
+                        height: this.props.itemHeight + 0.5,
+                            width: '100%',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginBottom: 12,
+                            borderTopWidth: 0.5,
+                            borderBottomWidth: 0.5,
+                            borderColor: '#eee',
+                    }}>
+                <Text style={{
+                        color: this.props.unitTextColor,
+                            fontSize: this.getSize(14),
+                            fontWeight: '900',
+                    }}>{this.props.timeUnit[!!this.props.onlyTime ? pickerId : pickerId - 3]}</Text>
+                    </View>
+                    </View>
+
+                    </View>
+                );
+                }
+
             }
         });
     }
@@ -190,32 +245,32 @@ class DatePicker extends BaseDialog {
         // this.state.pickerData = data.pickerData;
         // this.state.selectedIndex = data.selectedIndex;
         return <View
-            style={{
-                height: this.props.itemHeight * 5 + this.getSize(15) + this.getSize(44), width: this.mScreenWidth,
-            }}>
-            <View style={{ width: this.mScreenWidth, height: this.props.itemHeight * 5 + this.getSize(15), flexDirection: 'row', position: 'absolute', bottom: 0 }}>
-                {this.renderPicker()}
-            </View>
-            <View style={{
-                width: this.mScreenWidth, height: this.getSize(44),
+        style={{
+            height: this.props.itemHeight * 5 + this.getSize(15) + this.getSize(44), width: this.mScreenWidth,
+        }}>
+    <View style={{ width: this.mScreenWidth, height: this.props.itemHeight * 5 + this.getSize(15), flexDirection: 'row', position: 'absolute', bottom: 0 }}>
+        {this.renderPicker()}
+    </View>
+        <View style={{
+            width: this.mScreenWidth, height: this.getSize(44),
                 backgroundColor: this.props.confirmBackgroundColor, flexDirection: 'row',
                 justifyContent: 'space-between', position: 'absolute', top: 0
-            }}>
-                <TouchableOpacity
-                    onPress={() => {
-                        this.dismiss(() => this.props.onPickerCancel && this.props.onPickerCancel(this.props.selectedValue));
-                    }}
-                    style={{ width: this.getSize(60), height: this.getSize(44), justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={{ fontSize: this.props.cancelTextSize, fontWeight: '400', color: this.props.cancelTextColor }}>{this.props.cancelText}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => {
-                        this.dismiss(() => this.props.onPickerConfirm && this.props.onPickerConfirm(this.props.selectedValue));
-                    }}
-                    style={{ width: this.getSize(60), height: this.getSize(44), justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={{ fontSize: this.props.confirmTextSize, fontWeight: '400', color: this.props.confirmTextColor }}>{this.props.confirmText}</Text>
-                </TouchableOpacity>
-            </View>
+        }}>
+    <TouchableOpacity
+        onPress={() => {
+            this.dismiss(() => this.props.onPickerCancel && this.props.onPickerCancel(this.props.selectedValue));
+        }}
+        style={{ width: this.getSize(60), height: this.getSize(44), justifyContent: 'center', alignItems: 'center' }}>
+    <Text style={{ fontSize: this.props.cancelTextSize, fontWeight: '400', color: this.props.cancelTextColor }}>{this.props.cancelText}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+        onPress={() => {
+            this.dismiss(() => this.props.onPickerConfirm && this.props.onPickerConfirm(this.props.selectedValue));
+        }}
+        style={{ width: this.getSize(60), height: this.getSize(44), justifyContent: 'center', alignItems: 'center' }}>
+    <Text style={{ fontSize: this.props.confirmTextSize, fontWeight: '400', color: this.props.confirmTextColor }}>{this.props.confirmText}</Text>
+        </TouchableOpacity>
+        </View>
         </View>
     }
 }
