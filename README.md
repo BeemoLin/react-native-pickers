@@ -141,6 +141,16 @@ react-native-svg ios有error的話, 需要手動加lib (Target > General > Linke
             <td>单位</td>
         </tr>
         <tr>
+            <td>timeUnit</td>
+            <td>['時', '分', '秒']</td>
+            <td>时间单位</td>
+        </tr>
+        <tr>
+            <td>unitTextColor</td>
+            <td>'#97D5ff'</td>
+            <td>时间单位颜色</td>
+        </tr>
+        <tr>
             <td>selectedValue</td>
             <td>[
                 new Date().getFullYear() + '年', <br>
