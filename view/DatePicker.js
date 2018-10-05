@@ -220,9 +220,6 @@ class DatePicker extends BaseDialog {
                             justifyContent: 'center',
                             alignItems: 'center',
                             marginBottom: 12,
-                            borderTopWidth: 0.5,
-                            borderBottomWidth: 0.5,
-                            borderColor: '#eee',
                     }}>
                 <Text style={{
                         color: this.props.unitTextColor,
