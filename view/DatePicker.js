@@ -23,7 +23,7 @@ class DatePicker extends BaseDialog {
         onPickerConfirm: null,
         unit: ['年', '月', '日'],
         timeUnit: ['時', '分', '秒'],
-        selectedValue: [new Date().getFullYear() + '年', new Date().getMonth() + 1 + '月', new Date().getDate() + '日'],
+        selectedValue: [new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()],
         startYear: 1990,
         endYear: new Date().getFullYear(),
 
@@ -52,7 +52,7 @@ class DatePicker extends BaseDialog {
 
 
     getDateList() {
-        console.log(this.props)
+        //console.log(this.props)
         let unit = this.props.unit;
         let years = [];
         let months = [];
@@ -63,43 +63,44 @@ class DatePicker extends BaseDialog {
         let startYear = this.props.startYear;
         let endYear = this.props.endYear;
         for (let i = 0; i < endYear + 1 - startYear; i++) {
-            years.push(i + startYear + unit[0]);
+            years.push(i + startYear);
         }
 
         let selectedYear = years[0];
         if (this.props.selectedValue) {
             selectedYear = this.props.selectedValue[0];
         }
-        selectedYear = selectedYear.substr(0, selectedYear.length - unit[0].length);
+        selectedYear = selectedYear;//.substr(0, selectedYear.length - unit[0].length);
         for (let i = 1; i < 13; i++) {
-            months.push(i + unit[1]);
+            months.push(i);
         }
 
         let selectedMonth = months[0];
         if (this.props.selectedValue) {
             selectedMonth = this.props.selectedValue[1];
         }
-        selectedMonth = selectedMonth.substr(0, selectedMonth.length - unit[1].length);
+        selectedMonth = selectedMonth;//.substr(0, selectedMonth.length - unit[1].length);
 
         let dayCount = TimeUtils.getDaysInOneMonth(selectedYear, selectedMonth);
         for (let i = 1; i <= dayCount; i++) {
-            days.push(i + unit[2]);
+            days.push(i);
         }
 
         let selectedDay = days[0];
         if (this.props.selectedValue) {
             selectedDay = this.props.selectedValue[2];
         }
-        selectedDay = selectedDay.substr(0, selectedDay.length - unit[2].length);
+        selectedDay = selectedDay;//.substr(0, selectedDay.length - unit[2].length);
 
         if(!this.props.onlyTime) {
             pickerData = [years, months, days];
         }
 
         selectedIndex = [
-            years.indexOf(selectedYear + unit[0]) == -1 ? years.length - 1 : years.indexOf(selectedYear + unit[0]),
-            months.indexOf(selectedMonth + unit[1]),
-            days.indexOf(selectedDay + unit[2]) == -1 ? days.length - 1 : days.indexOf(selectedDay + unit[2])];
+            years.indexOf(selectedYear) == -1 ? years.length - 1 : years.indexOf(selectedYear),
+            months.indexOf(selectedMonth),
+            days.indexOf(selectedDay) == -1 ? days.length - 1 : days.indexOf(selectedDay)];
+
         this.props.selectedValue[0] = years[selectedIndex[0]];
         this.props.selectedValue[1] = months[selectedIndex[1]];
         this.props.selectedValue[2] = days[selectedIndex[2]];
@@ -169,24 +170,8 @@ class DatePicker extends BaseDialog {
         return this.state.pickerData.map((item, pickerId) => {
             if (item) {
                 if(!this.props.onlyTime && pickerId < 3) {
-                    return <PickerView
-                    key={'picker' + pickerId}
-                    itemTextColor={this.props.itemTextColor}
-                    itemSelectedColor={this.props.itemSelectedColor}
-                    list={item}
-                    onPickerSelected={(toValue) => {
-                        //是否联动的实现位置
-                        this.props.selectedValue[(this.props.onlyTime ? pickerId + 3 : pickerId)] = toValue;
-                        console.log('====')
-                        this.setState({ ...this.getDateList() });
-                    }}
-                    selectedIndex={this.state.selectedIndex[(this.props.onlyTime ? pickerId + 3 : pickerId)]}
-                    fontSize={this.getSize(14)}
-                    itemWidth={this.mScreenWidth / this.state.pickerData.length - (!this.props.onlyTime ? 0 : 30)}
-                    itemHeight={this.props.itemHeight} />
-                } else {
                     return (
-                        <View style={{
+                        <View key={'pickerview' + pickerId} style={{
                         width: this.mScreenWidth / this.state.pickerData.length,
                             flexDirection: 'row',
                             justifyContent: 'center',
@@ -200,15 +185,61 @@ class DatePicker extends BaseDialog {
                     onPickerSelected={(toValue) => {
                         //是否联动的实现位置
                         this.props.selectedValue[(this.props.onlyTime ? pickerId + 3 : pickerId)] = toValue;
-                        console.log('====')
+                        //console.log('====')
                         this.setState({ ...this.getDateList() });
                     }}
                     selectedIndex={this.state.selectedIndex[(this.props.onlyTime ? pickerId + 3 : pickerId)]}
                     fontSize={this.getSize(14)}
-                    itemWidth={this.mScreenWidth / this.state.pickerData.length - (!!this.props.onlyTime ? 40 : 30)}
+                    itemWidth={this.mScreenWidth / this.state.pickerData.length - 25}
                     itemHeight={this.props.itemHeight} />
                     <View style={{
-                        width: (!!this.props.onlyTime ? 40 : 30),
+                        width: 25,
+                            height: '100%',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            backgroundColor: '#fff'
+                    }}>
+                <View style={{
+                        height: this.props.itemHeight + 0.5,
+                            width: '100%',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginBottom: 14,
+                    }}>
+                <Text style={{
+                        color: this.props.unitTextColor,
+                            fontSize: this.getSize(14),
+                            fontWeight: '400',
+                    }}>{this.props.unit[pickerId]}</Text>
+                    </View>
+                    </View>
+                    </View>
+                );
+                } else {
+                    return (
+                        <View key={'pickerview' + pickerId} style={{
+                        width: this.mScreenWidth / this.state.pickerData.length,
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                    }}>
+                <PickerView
+                    key={'picker' + pickerId}
+                    itemTextColor={this.props.itemTextColor}
+                    itemSelectedColor={this.props.itemSelectedColor}
+                    list={item}
+                    onPickerSelected={(toValue) => {
+                        //是否联动的实现位置
+                        this.props.selectedValue[(this.props.onlyTime ? pickerId + 3 : pickerId)] = toValue;
+                        //console.log('====')
+                        this.setState({ ...this.getDateList() });
+                    }}
+                    selectedIndex={this.state.selectedIndex[(this.props.onlyTime ? pickerId + 3 : pickerId)]}
+                    fontSize={this.getSize(14)}
+                    itemWidth={this.mScreenWidth / this.state.pickerData.length - (!!this.props.onlyTime ? 40 : 25)}
+                    itemHeight={this.props.itemHeight} />
+                    <View style={{
+                        width: (!!this.props.onlyTime ? 40 : 25),
                             height: '100%',
                             justifyContent: 'center',
                             alignItems: 'center',
@@ -228,7 +259,6 @@ class DatePicker extends BaseDialog {
                     }}>{this.props.timeUnit[!!this.props.onlyTime ? pickerId : pickerId - 3]}</Text>
                     </View>
                     </View>
-
                     </View>
                 );
                 }
@@ -245,7 +275,7 @@ class DatePicker extends BaseDialog {
         style={{
             height: this.props.itemHeight * 5 + this.getSize(15) + this.getSize(44), width: this.mScreenWidth,
         }}>
-    <View style={{ width: this.mScreenWidth, height: this.props.itemHeight * 5 + this.getSize(15), flexDirection: 'row', position: 'absolute', bottom: 0 }}>
+    <View style={{ backgroundColor: '#fff', width: this.mScreenWidth, height: this.props.itemHeight * 5 + this.getSize(15), flexDirection: 'row', position: 'absolute', bottom: 0 }}>
         {this.renderPicker()}
     </View>
         <View style={{
